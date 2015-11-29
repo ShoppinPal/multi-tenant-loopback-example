@@ -1,6 +1,11 @@
 {
   "initial:before": {
-    "loopback#favicon": {}
+    "loopback#favicon": {},
+    "loopback#context": {},
+    "loopback#token": {
+      "params": ["state"]
+    },
+    "./middleware/userContext": {}
   },
   "initial": {
     "compression": {},
@@ -12,19 +17,22 @@
       }
     }
   },
-  "session": {
-  },
-  "auth": {
-  },
-  "parse": {
+  "session": {},
+  "auth": {},
+  "parse": {},
+  "routes:before": {
+    "./middleware/accessLogger": {
+      "paths": "/api/*"
+    }
   },
   "routes": {
     "loopback#rest": {
-      "paths": ["${restApiRoot}"]
+      "paths": [
+        "${restApiRoot}"
+      ]
     }
   },
-  "files": {
-  },
+  "files": {},
   "final": {
     "loopback#urlNotFound": {}
   },

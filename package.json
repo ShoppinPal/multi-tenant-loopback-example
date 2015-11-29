@@ -6,13 +6,18 @@
     "pretest": "jshint ."
   },
   "dependencies": {
-    "compression": "^1.0.3",
-    "cors": "^2.5.2",
-    "loopback": "^2.22.0",
-    "loopback-boot": "^2.6.5",
-    "loopback-component-explorer": "^2.1.0",
-    "loopback-datasource-juggler": "^2.39.0",
-    "serve-favicon": "^2.0.1"
+    "bluebird": "3.0.5",
+    "compression": "1.6.0",
+    "cors": "2.7.1",
+    "debug": "2.2.0",
+    "lodash": "3.10.1",
+    "loopback": "2.25.0",
+    "loopback-boot": "2.14.0",
+    "loopback-boot-utils": "1.0.1",
+    "loopback-component-explorer": "2.1.1",
+    "loopback-datasource-juggler": "2.41.2",
+    "serve-favicon": "2.3.0",
+    "underscore": "1.8.3"
   },
   "devDependencies": {
     "jshint": "^2.5.6"

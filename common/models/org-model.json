@@ -1,0 +1,29 @@
+{
+  "name": "OrgModel",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "displayName": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "userModels": {
+      "type": "hasMany",
+      "model": "UserModels",
+      "foreignKey": "orgModelId"
+    },
+    "sellerModels": {
+      "type": "hasMany",
+      "model": "SellerModel",
+      "foreignKey": "orgModelId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

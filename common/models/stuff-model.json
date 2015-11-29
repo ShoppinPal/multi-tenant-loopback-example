@@ -1,0 +1,39 @@
+{
+  "name": "StuffModel",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "orgModel": {
+      "type": "hasOne",
+      "model": "OrgModel",
+      "foreignKey": "orgModelId"
+    },
+    "sellerModel": {
+      "type": "belongsTo",
+      "model": "SellerModel",
+      "foreignKey": "sellerModelId"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "userFromAnotherOrg",
+      "permission": "DENY"
+    }
+  ],
+  "methods": {},
+  "mixins": {
+    "Utils": true
+  }
+}

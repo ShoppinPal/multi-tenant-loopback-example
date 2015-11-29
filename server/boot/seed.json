@@ -1,0 +1,12 @@
+{
+  "samples": [
+    {
+      "orgAdminA":{"seedWithRole": "orgAdmin", "seedWithOrg":"orgA", "username": "orgAdminA@orgA.com", "email": "orgAdminA@orgA.com", "password": "orgAdminA"},
+      "storeAdminA1":{"seedWithRole": "storeAdmin", "seedWithOrg":"orgA", "username": "storeAdminA1@orgA.com", "email": "storeAdminA1@orgA.com", "password": "storeAdminA1"},
+      "storeAdminA2":{"seedWithRole": "storeAdmin", "seedWithOrg":"orgA", "username": "storeAdminA2@orgA.com", "email": "storeAdminA2@orgA.com", "password": "storeAdminA2"},
+      "orgAdminB":{"seedWithRole": "orgAdmin", "seedWithOrg":"orgB", "username": "orgAdminB@orgB.com", "email": "orgAdminB@orgB.com", "password": "orgAdminB"},
+      "storeAdminB1":{"seedWithRole": "storeAdmin", "seedWithOrg":"orgB", "username": "storeAdminB1@orgB.com", "email": "storeAdminB1@orgB.com", "password": "storeAdminB1"},
+      "storeAdminB2":{"seedWithRole": "storeAdmin", "seedWithOrg":"orgB", "username": "storeAdminB2@orgB.com", "email": "storeAdminB2@orgB.com", "password": "storeAdminB2"}
+    }
+  ]
+}

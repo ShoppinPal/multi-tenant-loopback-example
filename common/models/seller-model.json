@@ -1,0 +1,26 @@
+{
+  "name": "SellerModel",
+  "base": "UserModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {
+    "stuffModels": {
+      "type": "hasMany",
+      "model": "StuffModel",
+      "foreignKey": "sellerModelId"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": {}
+}

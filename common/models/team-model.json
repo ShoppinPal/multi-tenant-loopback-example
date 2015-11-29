@@ -1,0 +1,29 @@
+{
+  "name": "TeamModel",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "orgId": {
+      "type": "string",
+      "required": true
+    },
+    "userId": {
+      "type": "string",
+      "required": true
+    },
+    "role": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "members": {
+      "type": "hasMany",
+      "model": "UserModel",
+      "foreignKey": "memberId"
+    }
+  },
+  "acls": [],
+  "methods": []
+}

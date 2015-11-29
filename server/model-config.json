@@ -14,7 +14,8 @@
     ]
   },
   "User": {
-    "dataSource": "db"
+    "dataSource": "db",
+    "public": false
   },
   "AccessToken": {
     "dataSource": "db",
@@ -31,5 +32,25 @@
   "Role": {
     "dataSource": "db",
     "public": false
+  },
+  "OrgModel": {
+    "dataSource": "db",
+    "public": false
+  },
+  "TeamModel": {
+    "dataSource": "db",
+    "public": false
+  },
+  "UserModel": {
+    "dataSource": "db",
+    "public": true
+  },
+  "SellerModel": {
+    "dataSource": "db",
+    "public": true
+  },
+  "StuffModel": {
+    "dataSource": "db",
+    "public": true
   }
 }
