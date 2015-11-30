@@ -1,0 +1,7 @@
+{
+  "name": "multi-tenant-loopback-example",
+  "description": "A sample which demonstrates how to achieve multi-tenancy in loopback apps",
+  "repository": "https://github.com/ShoppinPal/multi-tenant-loopback-example",
+  "logo": "https://node-js-sample.herokuapp.com/node.png",
+  "keywords": ["node", "loopback", "multi", "tenant", "multi-tenant"]
+}
