@@ -115,9 +115,17 @@ curl -X POST \
   -d '{"seedWithRole": "storeAdmin", "seedWithOrg":"orgA", "username": "storeAdminA4@orgA.com", "email": "storeAdminA4@orgA.com", "password": "storeAdminA4"}'
 ```
 
-## Test heroku deployment
+## High-Level Implementation Details
 
-https://heroku.com/deploy?template=https://github.com/ShoppinPal/multi-tenant-loopback-example/tree/master
+1. A user signup *should* always create a new organization and new team entry to track the user as the organization's administrator (`orgAdmin`).
+  1. The `create` method for `UserModel` is overridden so that the server-side is responsible for creating an `OrgModel` and doesn't trust the client to do so when a user signs up.
+  2. The `after save` hook on `UserModel` is used to tie together a newly created user with an organization and a role by creating a new entry in `TeamModel`.
+
+## Test Heroku deployment
+
+* https://devcenter.heroku.com/articles/heroku-button#testing-the-app-json-file
+  * I named it `multi-tenant-loopback-example` when I went through the process, you can name it something else: https://heroku.com/deploy?template=https://github.com/ShoppinPal/multi-tenant-loopback-example/tree/master
+* Tail heroku logs: `heroku logs -t -a multi-tenant-loopback-example` ... the app name like I said was set to `multi-tenant-loopback-example` by me but you may choose anything else.
 
 ## Attributions
 
