@@ -32,8 +32,8 @@ module.exports = function(Model, options) {
       // TODO: when used with core invocations, the call stack can end up here
       //       this error only makes sense to point out failures in RESTful calls
       //       how can this sanity check be made any better?
-      log.error('ctx', ctx);
-      log.error('currentUser', currentUser);
+      log.error('ctx:', ctx);
+      log.error('currentUser:', currentUser);
       cb('401 - unauthorized - how did we end up here? should we manage ACL access to remote methods ourselves?');
     }
   };

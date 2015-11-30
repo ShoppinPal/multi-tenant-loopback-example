@@ -5,6 +5,10 @@
 1. A `sysAdmin` like role for access over REST is unnecessary when compared to the security threat it poses. One can always SSH into the server directl and use something like `loopback-console` instead for `sysAdmin` purposes. Possibly exposing some kind of server-side-only impersonation API would make it even more useful.
 2. Currently there aren't any known use cases which merit exposing `TeamModel` over REST and given how it would complicate the ACLs a lot when attempting to prevent REST~ful users from adding themselves to other teams ... its just better to keep `TeamModel` at server-side-only.
 
+## Improvements
+
+* Instead of saving role as-is into `TeamModel` when provided by a restful client, some sort of validation against pre-seeded `Role`s should be performed.
+
 ## Testing Multi Tenancy
 
 ```
@@ -59,8 +63,16 @@ curl -X GET \
   --header "Accept: application/json"
 
 #9 orgAdminA can only FIND stuff which is specific to orgA
+#  filter={"where":{"name":{"like":"stuff"}}}
 curl -X GET \
   "http://localhost:3000/api/StuffModels?filter=%7B%22where%22%3A%7B%22name%22%3A%7B%22like%22%3A%22stuff%22%7D%7D%7D&access_token=XrnQHkS9FrBIJf9clE1aSekCvI5iEL4Xh7evgadEHYyNEz3i0GbItyQtsTNCLKp8" \
+  --header "Accept: application/json"
+
+#10 orgAdminA can only FIND-ONE stuff which is specific to orgA
+#   filter={"where":{"name":{"like":"stuff for orgB"}}}
+#   SHOULD return 404 with MODEL_NOT_FOUND
+curl -X GET \
+  "http://localhost:3000/api/StuffModels/findOne?filter=%7B%22where%22%3A%7B%22name%22%3A%7B%22like%22%3A%22stuff%20for%20orgB%22%7D%7D%7D&access_token=XrnQHkS9FrBIJf9clE1aSekCvI5iEL4Xh7evgadEHYyNEz3i0GbItyQtsTNCLKp8" \
   --header "Accept: application/json"
 ```
 
