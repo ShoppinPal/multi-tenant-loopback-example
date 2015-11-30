@@ -80,6 +80,26 @@ curl -X GET \
 curl -X GET \
   "http://localhost:3000/api/StuffModels/2?access_token=XrnQHkS9FrBIJf9clE1aSekCvI5iEL4Xh7evgadEHYyNEz3i0GbItyQtsTNCLKp8" \
   --header "Accept: application/json"
+
+#12 orgAdminA can create other users like a storeAdmin
+curl -X POST \
+  "http://localhost:3000/api/UserModels?access_token=XrnQHkS9FrBIJf9clE1aSekCvI5iEL4Xh7evgadEHYyNEz3i0GbItyQtsTNCLKp8" \
+  --header "Content-Type: application/json" \
+  --header "Accept: application/json" \
+  -d '{"seedWithRole": "storeAdmin", "seedWithOrg":"orgA", "username": "storeAdminA3@orgA.com", "email": "storeAdminA3@orgA.com", "password": "storeAdminA3"}'
+
+#13 a non-orgAdmin user should NOT be able to CRUD users
+curl -X POST \
+  "http://localhost:3000/api/UserModels/login" \
+  --header "Content-Type: application/json" \
+  --header "Accept: application/json" \
+  -d "{\"username\":\"storeAdminA3@orgA.com\", \"password\":\"storeAdminA3\"}"
+# k6kvYovXXLGBqCEBHKxwCGeidv5fmlJ5IwHMjilP5gYGlKNGr1dS6gyiybJ4PICL
+curl -X POST \
+  "http://localhost:3000/api/UserModels?access_token=k6kvYovXXLGBqCEBHKxwCGeidv5fmlJ5IwHMjilP5gYGlKNGr1dS6gyiybJ4PICL" \
+  --header "Content-Type: application/json" \
+  --header "Accept: application/json" \
+  -d '{"seedWithRole": "storeAdmin", "seedWithOrg":"orgA", "username": "storeAdminA4@orgA.com", "email": "storeAdminA4@orgA.com", "password": "storeAdminA4"}'
 ```
 
 ## Attributions
