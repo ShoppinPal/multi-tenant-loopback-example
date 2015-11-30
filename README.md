@@ -74,6 +74,12 @@ curl -X GET \
 curl -X GET \
   "http://localhost:3000/api/StuffModels/findOne?filter=%7B%22where%22%3A%7B%22name%22%3A%7B%22like%22%3A%22stuff%20for%20orgB%22%7D%7D%7D&access_token=XrnQHkS9FrBIJf9clE1aSekCvI5iEL4Xh7evgadEHYyNEz3i0GbItyQtsTNCLKp8" \
   --header "Accept: application/json"
+
+#11 orgAdminA can only FIND-BY-ID stuff which is specific to orgA
+#   SHOULD return 404 with MODEL_NOT_FOUND
+curl -X GET \
+  "http://localhost:3000/api/StuffModels/2?access_token=XrnQHkS9FrBIJf9clE1aSekCvI5iEL4Xh7evgadEHYyNEz3i0GbItyQtsTNCLKp8" \
+  --header "Accept: application/json"
 ```
 
 ## Attributions
