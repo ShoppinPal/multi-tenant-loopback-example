@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "server/server.js",
   "scripts": {
-    "pretest": "jshint ."
+    "pretest": "jshint .",
+    "start": "npm install && node ."
   },
   "dependencies": {
     "bluebird": "3.0.5",
@@ -23,8 +24,8 @@
     "jshint": "^2.5.6"
   },
   "repository": {
-    "type": "",
-    "url": ""
+    "type": "git",
+    "url": "https://github.com/ShoppinPal/multi-tenant-loopback-example"
   },
   "description": "multi-tenant-loopback-example"
 }
