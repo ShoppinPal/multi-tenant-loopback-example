@@ -57,6 +57,11 @@ curl -X GET \
 curl -X GET \
   "http://localhost:3000/api/StuffModels?access_token=TdrBJiyzLFJo2wF9dblSavnF90ZQGGEFJfyn5WuGjVUEQmvbZCX5Wws8dNR02iF6" \
   --header "Accept: application/json"
+
+#9 orgAdminA can only FIND stuff which is specific to orgA
+curl -X GET \
+  "http://localhost:3000/api/StuffModels?filter=%7B%22where%22%3A%7B%22name%22%3A%7B%22like%22%3A%22stuff%22%7D%7D%7D&access_token=XrnQHkS9FrBIJf9clE1aSekCvI5iEL4Xh7evgadEHYyNEz3i0GbItyQtsTNCLKp8" \
+  --header "Accept: application/json"
 ```
 
 ## Attributions

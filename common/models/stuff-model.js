@@ -28,10 +28,11 @@ module.exports = function(StuffModel) {
       if (currentUser) {
         //console.log('inside StuffModel.find() - currentUser: ', currentUser.username);
 
+        console.log('filter before edits:', filter);
         if (filter === undefined || filter === null) filter = {};
         if (filter.where === undefined || filter.where === null) filter.where = {};
         filter.where.orgModelId = currentUser.orgModelId; // TODO: will it break for purely server-side invokes?
-        console.log('filter:', filter);
+        console.log('filter after edits:', filter);
 
         return overriddenFind.apply(this, arguments);
       }
