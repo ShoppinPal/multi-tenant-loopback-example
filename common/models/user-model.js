@@ -10,17 +10,19 @@ module.exports = function(UserModel) {
   UserModel.on('dataSourceAttached', function() { //UserModel.on('attached', function() {
     var overridden = UserModel.create;
 
-    //UserModel.prototype.create = function(data, callback) { // doesn't work, i do not see a log statement for a REST call
+    /**
+     * Keep in mind, this method may be invoked by:
+     *   a) server-side calls which usually don't have any logged in user or request/response
+     *   b) RESTful client calls which may be "attempted" by orgAdmins (allowed) and non-orgAdmins (not-allowed)
+     *
+     * @param data
+     * @param callback
+     */
     UserModel.create = function(data, callback) { // works, i see a log statement for a REST call
       console.log('OVERRIDING UserModel create method');
 
       var self = this;
       var argsForCreate = arguments;
-
-      // TODO: need to figure out the user from context?
-      // TODO: the ACL should have already determines if this user is an org admin
-      // TODO: so we need to make sure that ordganizatio nthat they belong to is
-      //       the only one being referenced here when the team row/entry is created
 
       var currentUser = UserModel.getCurrentUserModel(callback); // returns immediately if no currentUser
       if (currentUser) {
@@ -37,10 +39,17 @@ module.exports = function(UserModel) {
               : log.debug('found', 'OrgModel', orgModel);
 
             if (created) {
-              // TODO: role can only be orgAdmin and if data.seedWithRole doesn't match that, we have a problem
+              // TODO: for users who "self-signup", the role MUST be `orgAdmin`
+              data.seedWithRole = 'orgAdmin';
             }
             else {
-              // TODO: role can be whatever is in data.seedWithRole
+              // for users who are added by an `orgAdmin`, the role can client specified
+              // ... whatever is present in the incoming data.seedWithRole
+
+              // TODO: since the ACL makes sure that only `orgAdmins` can access this method via REST,
+              //       there isn't a need to check currentUser's role here explicitly ... is there?
+
+              // TODO: validate that the named role in data.seedWithRole is indeed a valid `Role` in the DB
             }
 
             data.orgModelId = orgModel.id; // setup relationship explicitly
@@ -80,14 +89,17 @@ module.exports = function(UserModel) {
     }
     if (ctx.isNewInstance !== undefined && ctx.isNewInstance) {
       console.log('Adding a new TeamModel entry');
-      return UserModel.app.models.TeamModel.create({
-        orgId: ctx.instance.orgModelId || 'blah1',
+      UserModel.app.models.TeamModel.create({
+        orgId: ctx.instance.orgModelId,
         userId: ctx.instance.id,
-        role: ctx.instance.seedWithRole || 'blah2'
-      })
-        .then(function() {
+        role: ctx.instance.seedWithRole
+      }, function(err, obj){
+        if(err){
+          next(err);
+        } else {
           next();
-        });
+        }
+      });
     }
     else {
       next();

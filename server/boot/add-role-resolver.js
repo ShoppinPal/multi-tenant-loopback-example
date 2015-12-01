@@ -24,33 +24,41 @@ module.exports = function(app) {
     log('Role resolver for `userFromAnotherOrg`', '\n',
         ' - evaluate ' + context.model.definition.name + ' with id: ' + context.modelId, '\n',
         ' for currentUserId: ' + currentUserId);
-    context.model.findById(context.modelId, function(err, modelInstance) {
-      if (err) {
-        log('err', err);
-        return reject();
-      }
-      else if(!modelInstance) {
-        log('no matching instance of %s found', context.model.definition.name);
-        return reject();
-      }
-      else {
-        var TeamModel = app.models.TeamModel;
-        log('check if currentUserId:', currentUserId, '\n',
-          'is in the team table for the given model\'s orgModelId:', modelInstance.orgModelId);
-        TeamModel.count({
-          orgId: modelInstance.orgModelId, // TODO: figure out the org for given model
-          userId: currentUserId
-        }, function(err, count) {
-          if (err) {
-            console.log(err);
-            return cb(null, false);
-          }
 
-          log('is a user from another organization? count === 0', (count === 0));
-          cb(null, count === 0); // true = is a user from another organization
-        });
-      }
-    });
+    if (context.modelId) {
+      context.model.findById(context.modelId, function(err, modelInstance) {
+        if (err) {
+          log('err', err);
+          return reject();
+        }
+        else if(!modelInstance) {
+          log('no matching instance of %s found', context.model.definition.name);
+          return reject();
+        }
+        else {
+          var TeamModel = app.models.TeamModel;
+          log('check if currentUserId:', currentUserId, '\n',
+            'is in the team table for the given model\'s orgModelId:', modelInstance.orgModelId);
+          TeamModel.count({
+            orgId: modelInstance.orgModelId, // TODO: figure out the org for given model
+            userId: currentUserId
+          }, function(err, count) {
+            if (err) {
+              console.log(err);
+              return cb(null, false);
+            }
+
+            log('is a user from another organization? count === 0', (count === 0));
+            return cb(null, count === 0); // true = is a user from another organization
+          });
+        }
+      });
+    }
+    else {
+      log('no existing model is being accessed so a comparison to check userFromAnotherOrg cannot happen');
+      return cb(null, false); // true = is a user from another organization
+    }
+
   });
 
   /*Role.registerResolver('$manager', function(role, context, callback) {
