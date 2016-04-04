@@ -2,6 +2,13 @@
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
+# What does multi-tenant mean to us?
+
+1. Users can belong to an organization.
+2. We can have multiple organizations in the same loopback server/db.
+3. Any data created for the organization or any data created by the users of that organization should be segragated from the the users of another organization.
+4. If we want, we should be able to configure the users that belong to the same organization to view any data that other users of that organization created.
+
 ## Assumptions
 
 1. A `sysAdmin` like role for access over REST is unnecessary when compared to the security threat it poses. One can always SSH into the server directl and use something like `loopback-console` instead for `sysAdmin` purposes. Possibly exposing some kind of server-side-only impersonation API would make it even more useful.
