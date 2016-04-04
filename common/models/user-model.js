@@ -56,7 +56,7 @@ module.exports = function(UserModel) {
             data.orgModelId = orgModel.id; // setup relationship explicitly
 
             return overriddenCreate.apply(self, argsForCreate);
-          })
+          }) // END of spread-block
           .catch(function(error){
             if (error instanceof Error) {
               log.error('UserModel > create',
@@ -68,19 +68,18 @@ module.exports = function(UserModel) {
                 '\n', error);
             }
             callback(error);
-          });
+          }); // END of catch-block
 
         //return overriddenCreate.apply(this, argsForCreate);
-      }
+      } // END of if-currentUser-block
 
       // TODO: shouldn't callback be used for success?
       //       how are returned promises tying into the callback here?
-    };
+    }; // END of UserModel.create
 
-  });
+  }); // END of UserModel.on.dataSourceAttached
 
   UserModel.observe('after save', function(ctx, next) {
-    //var logger = require('tracer').console(); //var logger = console;
     log.debug('`after save` supports isNewInstance?', ctx.isNewInstance !== undefined);
     if (ctx.instance) {
       log.debug('Saved %s#%s', ctx.Model.modelName, ctx.instance.id);
