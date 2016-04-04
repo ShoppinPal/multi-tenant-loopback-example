@@ -30,7 +30,8 @@ module.exports = function(UserModel) {
         log.trace('data:', data);
 
         log.debug('data.seedWithOrg will be used to create an ORG if it does not exist');
-        /*return */UserModel.app.models.OrgModel.findOrCreate( // using `return` here will cause: "Error: Can't set headers after they are sent."
+        // using `return` here will cause: "Error: Can't set headers after they are sent."
+        UserModel.app.models.OrgModel.findOrCreate( //return UserModel.app.models.OrgModel.findOrCreate(
           {where: {displayName: data.seedWithOrg}}, // find
           {displayName: data.seedWithOrg} // or create
         )
