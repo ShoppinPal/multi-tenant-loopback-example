@@ -20,6 +20,8 @@
 
 ## Testing Multi Tenancy
 
+* Remove any pre-existing `db.json` file and run the server with `npm start`
+
 ```
 #0.a setup HOST_URL
 
@@ -32,104 +34,119 @@ export HOST_URL=https://multi-tenant-loopback-example.herokuapp.com
 #0.b make sure that HOST_URL is setup
 echo $HOST_URL
 
-#1 orgAdminA logs in
-curl -X POST \
+#1.1 orgAdminA logs in
+export ORG_ADMIN_A_TOKEN=`curl -X POST \
   "$HOST_URL/api/UserModels/login" \
   --header "Content-Type: application/json" \
   --header "Accept: application/json" \
-  -d "{\"username\":\"orgAdminA@orgA.com\", \"password\":\"orgAdminA\"}"
+  -d "{\"username\":\"orgAdminA@orgA.com\", \"password\":\"orgAdminA\"}" | \
+  node -pe "JSON.parse(require('fs').readFileSync('/dev/stdin').toString()).id"`
 
-## XrnQHkS9FrBIJf9clE1aSekCvI5iEL4Xh7evgadEHYyNEz3i0GbItyQtsTNCLKp8
-# setup ORG_ADMIN_A_TOKEN
-export ORG_ADMIN_A_TOKEN=XrnQHkS9FrBIJf9clE1aSekCvI5iEL4Xh7evgadEHYyNEz3i0GbItyQtsTNCLKp8
-# make sure that ORG_ADMIN_A_TOKEN is setup
+#1.2 make sure that ORG_ADMIN_A_TOKEN is setup
 echo $ORG_ADMIN_A_TOKEN
 
-#2 orgAdminB logs in
-curl -X POST \
+#2.1 orgAdminB logs in
+export ORG_ADMIN_B_TOKEN=`curl -X POST \
   "$HOST_URL/api/UserModels/login" \
   --header "Content-Type: application/json" \
   --header "Accept: application/json" \
-  -d "{\"username\":\"orgAdminB@orgB.com\", \"password\":\"orgAdminB\"}"
+  -d "{\"username\":\"orgAdminB@orgB.com\", \"password\":\"orgAdminB\"}" | \
+  node -pe "JSON.parse(require('fs').readFileSync('/dev/stdin').toString()).id"`
 
-## TdrBJiyzLFJo2wF9dblSavnF90ZQGGEFJfyn5WuGjVUEQmvbZCX5Wws8dNR02iF6
-# setup ORG_ADMIN_B_TOKEN
-export ORG_ADMIN_B_TOKEN=TdrBJiyzLFJo2wF9dblSavnF90ZQGGEFJfyn5WuGjVUEQmvbZCX5Wws8dNR02iF6
-# make sure that ORG_ADMIN_B_TOKEN is setup
+#2.2 make sure that ORG_ADMIN_B_TOKEN is setup
 echo $ORG_ADMIN_B_TOKEN
 
 #3 orgAdminA creates stuff
-curl -X POST \
+curl -w "\n" \
+  -X POST \
   "$HOST_URL/api/StuffModels?access_token=$ORG_ADMIN_A_TOKEN" \
   --header "Content-Type: application/json" \
   --header "Accept: application/json" \
   -d "{\"name\": \"stuff for orgA\"}"
 
 #4 orgAdminB creates stuff
-curl -X POST \
+curl -w "\n" \
+  -X POST \
   "$HOST_URL/api/StuffModels?access_token=$ORG_ADMIN_B_TOKEN" \
   --header "Content-Type: application/json" \
   --header "Accept: application/json" \
   -d "{\"name\": \"stuff for orgB\"}"
 
 #5 orgAdminA can get stuff which is specific to orgA
-curl -X GET \
+curl -w "\n" \
+  -X GET \
   "$HOST_URL/api/StuffModels/1?access_token=$ORG_ADMIN_A_TOKEN" \
   --header "Content-Type: application/json"
 
 #6 orgAdminA can NOT get stuff from another org
-curl -X GET \
+curl -w "\n" \
+  -X GET \
   "$HOST_URL/api/StuffModels/2?access_token=$ORG_ADMIN_A_TOKEN" \
   --header "Content-Type: application/json"
 
 #7 orgAdminA can only LIST stuff which is specific to orgA
-curl -X GET \
+curl -w "\n" \
+  -X GET \
   "$HOST_URL/api/StuffModels?access_token=$ORG_ADMIN_A_TOKEN" \
   --header "Accept: application/json"
 
 #8 orgAdminB can only LIST stuff which is specific to orgB
-curl -X GET \
+curl -w "\n" \
+  -X GET \
   "$HOST_URL/api/StuffModels?access_token=$ORG_ADMIN_B_TOKEN" \
   --header "Accept: application/json"
 
 #9 orgAdminA can only FIND stuff which is specific to orgA
 #  filter={"where":{"name":{"like":"stuff"}}}
-curl -X GET \
+curl -w "\n" \
+  -X GET \
   "$HOST_URL/api/StuffModels?filter=%7B%22where%22%3A%7B%22name%22%3A%7B%22like%22%3A%22stuff%22%7D%7D%7D&access_token=$ORG_ADMIN_A_TOKEN" \
   --header "Accept: application/json"
 
 #10 orgAdminA can only FIND-ONE stuff which is specific to orgA
 #   filter={"where":{"name":{"like":"stuff for orgB"}}}
 #   SHOULD return 404 with MODEL_NOT_FOUND
-curl -X GET \
+curl -w "\n" \
+  -X GET \
   "$HOST_URL/api/StuffModels/findOne?filter=%7B%22where%22%3A%7B%22name%22%3A%7B%22like%22%3A%22stuff%20for%20orgB%22%7D%7D%7D&access_token=$ORG_ADMIN_A_TOKEN" \
   --header "Accept: application/json"
 
 #11 orgAdminA can only FIND-BY-ID stuff which is specific to orgA
 #   SHOULD return 404 with MODEL_NOT_FOUND
-curl -X GET \
+curl -w "\n" \
+  -X GET \
   "$HOST_URL/api/StuffModels/2?access_token=$ORG_ADMIN_A_TOKEN" \
   --header "Accept: application/json"
 
 #12 orgAdminA can create other users like a storeAdmin
-curl -X POST \
+curl -w "\n" \
+  -X POST \
   "$HOST_URL/api/UserModels?access_token=$ORG_ADMIN_A_TOKEN" \
   --header "Content-Type: application/json" \
   --header "Accept: application/json" \
   -d '{"seedWithRole": "storeAdmin", "seedWithOrg":"orgA", "username": "storeAdminA3@orgA.com", "email": "storeAdminA3@orgA.com", "password": "storeAdminA3"}'
 
-#13 a non-orgAdmin user should NOT be able to CRUD users
-curl -X POST \
+#13.1 storeAdminA3 logs in
+export STORE_ADMIN_A3_TOKEN=`curl -X POST \
   "$HOST_URL/api/UserModels/login" \
   --header "Content-Type: application/json" \
   --header "Accept: application/json" \
-  -d "{\"username\":\"storeAdminA3@orgA.com\", \"password\":\"storeAdminA3\"}"
-# k6kvYovXXLGBqCEBHKxwCGeidv5fmlJ5IwHMjilP5gYGlKNGr1dS6gyiybJ4PICL
-curl -X POST \
-  "$HOST_URL/api/UserModels?access_token=k6kvYovXXLGBqCEBHKxwCGeidv5fmlJ5IwHMjilP5gYGlKNGr1dS6gyiybJ4PICL" \
+  -d "{\"username\":\"storeAdminA3@orgA.com\", \"password\":\"storeAdminA3\"}" | \
+  node -pe "JSON.parse(require('fs').readFileSync('/dev/stdin').toString()).id"`
+
+#13.2 storeAdminA3 cannot create other users, this request should fail
+curl -w "\n" \
+  -X POST \
+  "$HOST_URL/api/UserModels?access_token=$STORE_ADMIN_A3_TOKEN" \
   --header "Content-Type: application/json" \
   --header "Accept: application/json" \
   -d '{"seedWithRole": "storeAdmin", "seedWithOrg":"orgA", "username": "storeAdminA4@orgA.com", "email": "storeAdminA4@orgA.com", "password": "storeAdminA4"}'
+
+#13.2 storeAdminA3 can get stuff which is specific to orgA
+curl -w "\n" \
+  -X GET \
+  "$HOST_URL/api/StuffModels?access_token=$STORE_ADMIN_A3_TOKEN" \
+  --header "Accept: application/json"
 ```
 
 ## High-Level Implementation Details
