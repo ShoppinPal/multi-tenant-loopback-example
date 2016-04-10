@@ -4,7 +4,7 @@
   "main": "server/server.js",
   "scripts": {
     "pretest": "jshint .",
-    "start": "npm install && DEBUG=loopback:*,boot:*,common:* node ."
+    "start": "npm install && DEBUG=loopback:*,boot:*,common:*,server:mixins:* node ."
   },
   "dependencies": {
     "bluebird": "3.0.5",
