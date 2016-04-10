@@ -28,6 +28,12 @@
     {
       "accessType": "*",
       "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
       "principalId": "userFromAnotherOrg",
       "permission": "DENY"
     }
