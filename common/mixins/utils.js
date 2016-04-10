@@ -7,13 +7,26 @@ var path = require('path');
 var fileName = path.basename(__filename, '.js'); // gives the filename without the .js extension
 var log = require('./../lib/debug-extension')('common:mixins:'+fileName);
 
+/**
+ *
+ * @param Model - is the model class
+ * @param options - is an object containing the configurable properties from model definition file
+ *
+ * for ex:
+ * "mixins": {
+ *   "myMixin": {
+ *     "myOptionA": "blue",
+ *     "myOptionB": "green"
+ *   }
+ * }
+ */
 module.exports = function(Model, options) {
 
   Model.getCurrentUserModel = function(cb) {
     var ctx = loopback.getCurrentContext();
     var currentUser = ctx && ctx.get('currentUser');
     if (currentUser) {
-      log.trace('inside ' + Model.definition.name + '.getCurrentUserModel() - currentUser: ', currentUser.username);
+      log.trace('inside ' + Model.definition.name + '.getCurrentUserModel() - currentUser: ', (currentUser.username || currentUser.id));
       //return currentUser;
       return Promise.promisifyAll(
         currentUser,
